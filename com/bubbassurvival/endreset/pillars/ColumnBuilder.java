@@ -25,34 +25,60 @@ public class ColumnBuilder {
     }
 
     private static void createPillar(Chunk c){
-        ArrayList<Character> cs = PillarType.getBluePrints(PillarType.chooseRandomPillarType());
-        int base = c.getChunkSnapshot().getHighestBlockYAt(8, 8) - 1;
 
+        PillarType pt = PillarType.chooseRandomPillarType();
         int topX = 0, topZ = 0, hieght = generateRandomHieght();
 
-        for(int y = 0; y <= hieght; y++){
-            for(int x = 0; x <= 15; x++){
-                for(int z = 0; z <= 15; z++){
-                    char block = cs.get(z + (x * 16));
+        int base = c.getChunkSnapshot().getHighestBlockYAt(8, 8) - 1;
+        if(c.getBlock(8, base, 8).getType() != Material.ENDER_STONE || base < 32) return;
 
-                    if(block == '■'){
-                        if(c.getBlock(x, base + y, z).getType() == Material.AIR)
-                            c.getBlock(x, base + y, z).setType(Material.OBSIDIAN);
-                    }else if(block == 'T'){
-                        topX = x;
-                        topZ = z;
-                        if(c.getBlock(x, base + y, z).getType() == Material.AIR)
-                            c.getBlock(x, base + y, z).setType(Material.OBSIDIAN);
+        System.out.println("Base |  hieght:" + base + "   type:" + c.getBlock(8, base, 8).getType());
+
+        int mh = 0;
+
+        for(int layers = pt == PillarType.Mega ? 4 : 1; layers > 0; layers--){
+
+            if(pt == PillarType.Mega) hieght = (int) Math.pow(layers, 2.5);
+            ArrayList<Character> cs = PillarType.getBluePrints(pt, layers);
+
+            for(int y = 0; y <= hieght; y++){
+                for(int x = 0; x <= 15; x++){
+                    for(int z = 0; z <= 15; z++){
+                        char block = cs.get(z + (x * 16));
+
+                        if(block == '■'){
+                            if(c.getBlock(x, base + y + mh, z).getType() == Material.AIR)
+                                c.getBlock(x, base + y + mh, z).setType(Material.OBSIDIAN);
+                        }else if(block == 'T'){
+                            topX = x;
+                            topZ = z;
+                            if(c.getBlock(x, base + y + mh, z).getType() == Material.AIR)
+                                c.getBlock(x, base + y + mh, z).setType(Material.OBSIDIAN);
+                        }
                     }
                 }
             }
+
+            mh += hieght;
         }
 
-        c.getBlock(topX, base + hieght + 1, topZ).setType(Material.BEDROCK);
-        c.getBlock(topX, base + hieght + 2, topZ).setType(Material.FIRE);
         Location loc = c.getBlock(topX, base + hieght + 1, topZ).getLocation();
-        c.getWorld()
-                .spawnEntity(new Location(loc.getWorld(), loc.getX() + 0.5, loc.getY(), loc.getZ() + 0.5), EntityType.ENDER_CRYSTAL);
+
+        if(pt == PillarType.Mega){
+
+            c.getBlock(topX, base + hieght + mh, topZ).setType(Material.BEDROCK);
+            c.getBlock(topX, base + hieght + 1 + mh, topZ).setType(Material.FIRE);
+
+            c.getWorld()
+                    .spawnEntity(new Location(loc.getWorld(), loc.getX() + 0.5, loc.getY() - 1 + mh, loc.getZ() + 0.5), EntityType.ENDER_CRYSTAL);
+        }else{
+
+            c.getBlock(topX, base + hieght + 1, topZ).setType(Material.BEDROCK);
+            c.getBlock(topX, base + hieght + 2, topZ).setType(Material.FIRE);
+
+            c.getWorld()
+                    .spawnEntity(new Location(loc.getWorld(), loc.getX() + 0.5, loc.getY(), loc.getZ() + 0.5), EntityType.ENDER_CRYSTAL);
+        }
     }
 
     private static int generateRandomHieght(){
