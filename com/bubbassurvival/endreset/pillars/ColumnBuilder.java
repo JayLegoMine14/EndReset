@@ -32,8 +32,6 @@ public class ColumnBuilder {
         int base = c.getChunkSnapshot().getHighestBlockYAt(8, 8) - 1;
         if(c.getBlock(8, base, 8).getType() != Material.ENDER_STONE || base < 32) return;
 
-        System.out.println("Base |  hieght:" + base + "   type:" + c.getBlock(8, base, 8).getType());
-
         int mh = 0;
 
         for(int layers = pt == PillarType.Mega ? 4 : 1; layers > 0; layers--){
@@ -61,24 +59,30 @@ public class ColumnBuilder {
 
             mh += hieght;
         }
-
-        Location loc = c.getBlock(topX, base + hieght + 1, topZ).getLocation();
+        
+        mh -= 1;
+        Location loc = c.getBlock(topX, base + hieght, topZ).getLocation();
 
         if(pt == PillarType.Mega){
-
-            c.getBlock(topX, base + hieght + mh, topZ).setType(Material.BEDROCK);
-            c.getBlock(topX, base + hieght + 1 + mh, topZ).setType(Material.FIRE);
-
-            c.getWorld()
-                    .spawnEntity(new Location(loc.getWorld(), loc.getX() + 0.5, loc.getY() - 1 + mh, loc.getZ() + 0.5), EntityType.ENDER_CRYSTAL);
+            
+            buildTopper(loc, 0, mh, 0);
+            buildTopper(loc, 3, mh, 0);
+            buildTopper(loc, -3, mh, 0);
+            buildTopper(loc, 0, mh, 3);
+            buildTopper(loc, 0, mh, -3);
+            
         }else{
-
-            c.getBlock(topX, base + hieght + 1, topZ).setType(Material.BEDROCK);
-            c.getBlock(topX, base + hieght + 2, topZ).setType(Material.FIRE);
-
-            c.getWorld()
-                    .spawnEntity(new Location(loc.getWorld(), loc.getX() + 0.5, loc.getY(), loc.getZ() + 0.5), EntityType.ENDER_CRYSTAL);
+            
+            buildTopper(loc, 0, 0, 0);    
         }
+    }
+    
+    private static void buildTopper(Location loc, int xOff, int yOff, int zOff){
+        World w = loc.getWorld();
+        
+        w.getBlockAt(new Location(w, loc.getX() + xOff, loc.getY() + yOff + 1, loc.getZ() + zOff)).setType(Material.BEDROCK);
+        w.getBlockAt(new Location(w, loc.getX() + xOff, loc.getY() + yOff + 2, loc.getZ() + zOff)).setType(Material.FIRE);
+        w.spawnEntity(new Location(w, loc.getX() + xOff + 0.5, loc.getY() + yOff + 1, loc.getZ() + zOff + 0.5), EntityType.ENDER_CRYSTAL);
     }
 
     private static int generateRandomHieght(){
@@ -88,7 +92,7 @@ public class ColumnBuilder {
     private static boolean chunkDoesNotContainPillarAndIsPartOfIsland(Chunk c){
         boolean partOfIsland = false, containsPillar = false;
 
-        for(int y = 0; y <= 256; y++){
+        for(int y = 32; y <= 64; y++){
             for(int x = 0; x <= 15; x++){
                 for(int z = 0; z <= 15; z++){
                     if(c.getBlock(x, y, z).getType() == Material.OBSIDIAN)

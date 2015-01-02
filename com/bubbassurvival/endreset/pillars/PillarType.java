@@ -3,21 +3,28 @@ package com.bubbassurvival.endreset.pillars;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.bubbassurvival.endreset.main.EndReset;
+
 public enum PillarType {
 
     Small, Medium, Large, Mega;
 
     public static PillarType chooseRandomPillarType(){
         double chance = Math.random();
+        
+        if(chance <= EndReset.megatowerfrequency)
+            return PillarType.Mega;
+        
+        chance = Math.random();
 
         if(chance < .33)
             return PillarType.Small;
-        else if(chance > .33 && chance <= .66)
+        else if(chance >= .33 && chance <= .66)
             return PillarType.Medium;
-        else if(chance > .66 && chance <= .90)
+        else if(chance > .66 && chance <= 1)
             return PillarType.Large;
         else
-            return PillarType.Mega;
+            return PillarType.Small;
     }
 
     public static ArrayList<Character> getBluePrints(PillarType pt, int layers){
@@ -30,23 +37,23 @@ public enum PillarType {
                 
                                     'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
                 
-                                    'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
-                
                                     'A', 'A', 'A', 'A', 'A', 'A', '■', '■', '■', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
                 
                                     'A', 'A', 'A', 'A', 'A', '■', '■', '■', '■', '■', 'A', 'A', 'A', 'A', 'A', 'A',
                 
                                     'A', 'A', 'A', 'A', '■', '■', '■', '■', '■', '■', '■', 'A', 'A', 'A', 'A', 'A',
                 
-                                    'A', 'A', 'A', 'A', '■', '■', '■', 'T', '■', '■', '■', 'A', 'A', 'A', 'A', 'A',
+                                    'A', 'A', 'A', '■', '■', '■', '■', '■', '■', '■', '■', '■', 'A', 'A', 'A', 'A',
+                
+                                    'A', 'A', 'A', '■', '■', '■', '■', 'T', '■', '■', '■', '■', 'A', 'A', 'A', 'A',
+                
+                                    'A', 'A', 'A', '■', '■', '■', '■', '■', '■', '■', '■', '■', 'A', 'A', 'A', 'A',
                 
                                     'A', 'A', 'A', 'A', '■', '■', '■', '■', '■', '■', '■', 'A', 'A', 'A', 'A', 'A',
                 
                                     'A', 'A', 'A', 'A', 'A', '■', '■', '■', '■', '■', 'A', 'A', 'A', 'A', 'A', 'A',
                 
                                     'A', 'A', 'A', 'A', 'A', 'A', '■', '■', '■', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
-                
-                                    'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
                 
                                     'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
                 
@@ -125,7 +132,7 @@ public enum PillarType {
             switch(layers){
             case 1:
                 return new ArrayList<Character>(
-                        Arrays.asList(  'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
+                        Arrays.asList(  'A', 'A', 'A', 'A', 'A', 'A', 'A', '■', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
 
                                         'A', 'A', 'A', 'A', 'A', 'A', 'A', '■', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
         
@@ -139,7 +146,7 @@ public enum PillarType {
                     
                                         'A', 'A', 'A', '■', '■', '■', '■', '■', '■', '■', '■', '■', 'A', 'A', 'A', 'A',
                     
-                                        'A', '■', '■', '■', '■', '■', '■', 'T', '■', '■', '■', '■', '■', '■', 'A', 'A',
+                                        '■', '■', '■', '■', '■', '■', '■', 'T', '■', '■', '■', '■', '■', '■', '■', 'A',
                     
                                         'A', 'A', 'A', '■', '■', '■', '■', '■', '■', '■', '■', '■', 'A', 'A', 'A', 'A',
                     
@@ -153,7 +160,7 @@ public enum PillarType {
                     
                                         'A', 'A', 'A', 'A', 'A', 'A', 'A', '■', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
                     
-                                        'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
+                                        'A', 'A', 'A', 'A', 'A', 'A', 'A', '■', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
                     
                                         'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A'));
             case 2:
@@ -164,23 +171,23 @@ public enum PillarType {
 
                                         'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
                     
-                                        'A', 'A', 'A', 'A', 'A', 'A', 'A', '■', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
+                                        'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
                     
-                                        'A', 'A', 'A', 'A', '■', 'A', '■', '■', '■', 'A', '■', 'A', 'A', 'A', 'A', 'A',
+                                        'A', 'A', 'A', 'A', 'A', 'A', '■', '■', '■', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
                     
                                         'A', 'A', 'A', 'A', 'A', '■', '■', '■', '■', '■', 'A', 'A', 'A', 'A', 'A', 'A',
                     
                                         'A', 'A', 'A', 'A', '■', '■', '■', '■', '■', '■', '■', 'A', 'A', 'A', 'A', 'A',
                     
-                                        'A', 'A', 'A', '■', '■', '■', '■', 'T', '■', '■', '■', '■', 'A', 'A', 'A', 'A',
+                                        'A', 'A', 'A', 'A', '■', '■', '■', 'T', '■', '■', '■', 'A', 'A', 'A', 'A', 'A',
                     
                                         'A', 'A', 'A', 'A', '■', '■', '■', '■', '■', '■', '■', 'A', 'A', 'A', 'A', 'A',
                     
                                         'A', 'A', 'A', 'A', 'A', '■', '■', '■', '■', '■', 'A', 'A', 'A', 'A', 'A', 'A',
                     
-                                        'A', 'A', 'A', 'A', '■', 'A', '■', '■', '■', 'A', '■', 'A', 'A', 'A', 'A', 'A',
+                                        'A', 'A', 'A', 'A', 'A', 'A', '■', '■', '■', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
                     
-                                        'A', 'A', 'A', 'A', 'A', 'A', 'A', '■', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
+                                        'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
                     
                                         'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A',
                     

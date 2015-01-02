@@ -42,6 +42,7 @@ public class EndReset extends JavaPlugin implements Listener, Runnable {
 
     FileConfiguration config;
     public static double towerfrequency;
+    public static double megatowerfrequency;
 
     public EndReset(){
         super();
@@ -67,11 +68,13 @@ public class EndReset extends JavaPlugin implements Listener, Runnable {
         config = this.getConfig();
         config.options().header("towerfrequency is the percent chance a tower will spawn on a viable block.");
         config.addDefault("towerfrequency", 10.0);
+        config.addDefault("megatowerfrequency", .1);
         config.options().copyDefaults(true);
         saveConfig();
 
         try{
             towerfrequency = config.getDouble("towerfrequency");
+            megatowerfrequency = config.getDouble("megatowerfrequency");
         }catch (IllegalArgumentException e){
             this.getServer()
                     .getConsoleSender()
@@ -557,7 +560,6 @@ public class EndReset extends JavaPlugin implements Listener, Runnable {
 
     private class SaveThread implements Runnable {
 
-        @SuppressWarnings("deprecation")
         @Override
         public void run(){
             if(!EndReset.this.save){
@@ -582,7 +584,7 @@ public class EndReset extends JavaPlugin implements Listener, Runnable {
                 out.writeObject(EndReset.this.dragonAmount);
                 out.writeObject(EndReset.this.suspendedTasks);
                 EndReset.this.getServer().getScheduler()
-                        .scheduleAsyncDelayedTask((Plugin) EndReset.this, (Runnable) new AsyncSaveThread(out));
+                        .scheduleSyncDelayedTask((Plugin) EndReset.this, (Runnable) new AsyncSaveThread(out));
             }catch (Exception e){
                 EndReset.this.saveLock.set(false);
                 EndReset.this.getServer().getLogger().info("[" + EndReset.this.getName() + "] can't write savefile!");
